@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: library
+
+  datasource:
+    url: "jdbc:postgresql://database:5432/library"
+    username: "postgres"
+    password: "postgres"
+    driver-class-name: org.postgresql.Driver
+
+  rabbitmq:
+    password: guest
+    username: guest
+    host: rabbitmq
+    template:
+      exchange: notification
+    virtual-host: /
+
+messaging:
+  consumer:
+    book-operations:
+      queue: library.book_operations

@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  library:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+      - rabbitmq
+    ports:
+      - "8080:8080"
+    networks:
+      - library-network
+
+  database:
+    image: postgres:16.3
+    restart: always
+    environment:
+      POSTGRES_DB: "library"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    networks:
+      - library-network
+
+  rabbitmq:
+    build:
+      context: /rabbitmq-image
+      dockerfile: Dockerfile
+    environment:
+      RABBITMQ_CONFIG_FILE: /etc/rabbitmq/rabbitmq.conf
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+    networks:
+      - library-network
+
+networks:
+  library-network:
+    driver: bridge
